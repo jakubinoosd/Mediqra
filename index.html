@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediqra Health | Moderná zdravotná starostlivosť</title>
+    <meta name="description" content="Vaše zdravie je naša priorita. Rýchle termíny, skúsení lekári a moderné vybavenie. Objednajte sa online.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           1. PREMENNÉ A RESET
+           ========================================= */
+        :root {
+            --primary: #2EC4B6; /* Mint green */
+            --primary-dark: #25a195;
+            --accent: #3A86FF; /* Modrá */
+            --bg-light: #F7F9FB;
+            --text-main: #1A1A1A;
+            --text-sub: #6C757D;
+            --white: #FFFFFF;
+            
+            --shadow-soft: 0 15px 40px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 50px rgba(46, 196, 182, 0.15);
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --transition: all 0.3s ease-in-out;
+            --header-height: 90px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { font-family: var(--font-body); color: var(--text-main); background-color: var(--white); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; object-fit: cover; }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 100px 0; }
+        .bg-light { background-color: var(--bg-light); }
+        
+        .section__header { text-align: center; margin-bottom: 3.5rem; max-width: 700px; margin-inline: auto; }
+        .section__title { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 600; margin-bottom: 1rem; color: var(--text-main); }
+        .section__subtitle { color: var(--text-sub); font-size: 1.1rem; }
+
+        /* Tlačidlá */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px; border-radius: 50px; font-family: var(--font-heading); font-weight: 500; font-size: 1rem; cursor: pointer; transition: var(--transition); border: none; }
+        .btn--primary { background-color: var(--primary); color: var(--white); box-shadow: 0 10px 20px rgba(46, 196, 182, 0.2); }
+        .btn--primary:hover { background-color: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 15px 25px rgba(46, 196, 182, 0.3); }
+        .btn--accent { background-color: var(--accent); color: var(--white); box-shadow: 0 10px 20px rgba(58, 134, 255, 0.2); }
+        .btn--accent:hover { background-color: #2b6fe0; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(58, 134, 255, 0.3); }
+        .btn--outline { background-color: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn--outline:hover { background-color: var(--primary); color: var(--white); }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* =========================================
+           2. HEADER
+           ========================================= */
+        .header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index: 1000; transition: var(--transition); display: flex; align-items: center; border-bottom: 1px solid transparent; }
+        .header.scrolled { height: 80px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-bottom-color: #eee; }
+        
+        .header__container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .header__logo { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        .header__logo i { color: var(--primary); font-size: 2rem; }
+        
+        .nav__list { display: flex; gap: 2.5rem; align-items: center; }
+        .nav__link { font-weight: 500; color: var(--text-main); position: relative; padding: 5px 0; }
+        .nav__link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--primary); transition: width 0.3s ease; }
+        .nav__link:hover { color: var(--primary); }
+        .nav__link:hover::after { width: 100%; }
+
+        .header__toggle { display: none; font-size: 1.5rem; color: var(--text-main); background: none; border: none; cursor: pointer; }
+
+        /* =========================================
+           3. HERO SEKCIA
+           ========================================= */
+        .hero { position: relative; padding-top: calc(var(--header-height) + 60px); padding-bottom: 120px; background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%); overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -10%; right: -5%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(46,196,182,0.1) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: 0; }
+
+        .hero__container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
+        .hero__content h1 { font-family: var(--font-heading); font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 700; line-height: 1.15; color: var(--text-main); margin-bottom: 1.5rem; }
+        .hero__content h1 span { color: var(--primary); }
+        .hero__content p { font-size: 1.15rem; color: var(--text-sub); margin-bottom: 2.5rem; max-width: 500px; }
+        .hero__actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+        
+        .hero__image-wrapper { position: relative; border-radius: var(--radius-lg); }
+        .hero__image { border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); height: 500px; width: 100%; }
+        
+        .hero__badge { position: absolute; bottom: -20px; left: -30px; background: var(--white); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-soft); display: flex; align-items: center; gap: 15px; animation: float 4s ease-in-out infinite; }
+        .hero__badge i { font-size: 2rem; color: var(--accent); background: rgba(58, 134, 255, 0.1); padding: 15px; border-radius: 50%; }
+        .hero__badge-text h4 { font-family: var(--font-heading); font-size: 1.2rem; }
+        .hero__badge-text p { color: var(--text-sub); font-size: 0.9rem; margin: 0; }
+
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+        /* =========================================
+           4. QUICK BOOKING FORM (Prekrýva Hero)
+           ========================================= */
+        .booking-section { position: relative; z-index: 10; margin-top: -80px; padding-bottom: 80px; }
+        
+        .booking__card { background-color: var(--white); padding: 2.5rem 3rem; border-radius: var(--radius-lg); box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.02); }
+        .booking__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; align-items: end; }
+        
+        .booking__group { display: flex; flex-direction: column; gap: 8px; position: relative; }
+        .booking__label { font-size: 0.9rem; font-weight: 500; color: var(--text-main); }
+        .booking__input { width: 100%; padding: 14px 16px 14px 45px; border: 1px solid #E5E7EB; border-radius: 12px; font-family: var(--font-body); font-size: 1rem; color: var(--text-main); transition: var(--transition); background-color: #FCFDFD; }
+        .booking__input:focus { outline: none; border-color: var(--primary); background-color: var(--white); box-shadow: 0 0 0 4px rgba(46, 196, 182, 0.1); }
+        
+        .booking__icon { position: absolute; left: 16px; bottom: 15px; color: var(--primary); font-size: 1.1rem; pointer-events: none; }
+        select.booking__input { appearance: none; cursor: pointer; }
+        input[type="date"].booking__input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
+
+        .booking__btn { height: 52px; width: 100%; border-radius: 12px; font-size: 1.05rem; }
+
+        .booking__success { display: none; text-align: center; padding: 2rem; }
+        .booking__success i { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; }
+        .booking__success h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+        /* =========================================
+           5. ODDELENIA (Tabs)
+           ========================================= */
+        .dept-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 3rem; }
+        
+        .dept-tab { padding: 12px 28px; border-radius: 50px; font-family: var(--font-heading); font-weight: 500; font-size: 1rem; cursor: pointer; transition: var(--transition); border: 2px solid #E5E7EB; background: var(--white); color: var(--text-sub); }
+        .dept-tab:hover { border-color: var(--primary); color: var(--primary); }
+        .dept-tab.active { background-color: var(--primary); border-color: var(--primary); color: var(--white); box-shadow: 0 10px 20px rgba(46, 196, 182, 0.2); }
+
+        .dept-content-wrap { position: relative; min-height: 400px; }
+        .dept-content { display: none; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; background: var(--white); padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); animation: fadeIn 0.5s ease; border: 1px solid rgba(0,0,0,0.02); }
+        .dept-content.active { display: grid; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .dept-image { border-radius: var(--radius-md); overflow: hidden; height: 350px; width: 100%; }
+        .dept-image img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .dept-info h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 1rem; color: var(--text-main); }
+        .dept-info p { color: var(--text-sub); margin-bottom: 1.5rem; font-size: 1.05rem; }
+        
+        .dept-features { list-style: none; margin-bottom: 2rem; display: grid; gap: 10px; }
+        .dept-features li { display: flex; align-items: center; gap: 12px; color: var(--text-main); font-weight: 500; }
+        .dept-features li i { color: var(--primary); font-size: 1.2rem; background: rgba(46, 196, 182, 0.1); padding: 6px; border-radius: 50%; }
+
+        /* =========================================
+           6. TÍM LEKÁROV
+           ========================================= */
+        .doctors__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; }
+        .doctor-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); transition: var(--transition); border: 1px solid rgba(0,0,0,0.02); }
+        .doctor-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-hover); border-color: rgba(46, 196, 182, 0.2); }
+        .doctor-card__image { width: 100%; height: 320px; position: relative; overflow: hidden; }
+        .doctor-card__image img { width: 100%; height: 100%; transition: transform 0.5s ease; }
+        .doctor-card:hover .doctor-card__image img { transform: scale(1.05); }
+        .doctor-card__info { padding: 1.5rem; text-align: center; }
+        .doctor-card__name { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .doctor-card__spec { color: var(--primary); font-weight: 500; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* =========================================
+           7. PREČO SI VYBRAŤ NÁS
+           ========================================= */
+        .benefits__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+        .benefit-card { display: flex; align-items: flex-start; gap: 1.2rem; }
+        .benefit-card__icon { font-size: 2rem; color: var(--accent); background: var(--white); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 15px; box-shadow: 0 10px 20px rgba(58, 134, 255, 0.1); flex-shrink: 0; }
+        .benefit-card__content h4 { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .benefit-card__content p { color: var(--text-sub); font-size: 0.95rem; }
+
+        /* =========================================
+           8. RECENZIE
+           ========================================= */
+        .testimonials__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: var(--bg-light); padding: 2.5rem; border-radius: var(--radius-lg); position: relative; border: 1px solid #E5E7EB; }
+        .testimonial-card::before { content: '\f10d'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 2rem; right: 2rem; font-size: 3rem; color: rgba(46, 196, 182, 0.1); }
+        .testimonial-card__stars { color: #FFD166; margin-bottom: 1rem; font-size: 1.1rem; }
+        .testimonial-card__text { font-size: 1.05rem; font-style: italic; color: var(--text-main); margin-bottom: 1.5rem; line-height: 1.7; }
+        .testimonial-card__author { display: flex; align-items: center; gap: 1rem; }
+        .testimonial-card__author img { width: 55px; height: 55px; border-radius: 50%; }
+        .testimonial-card__author h5 { font-family: var(--font-heading); font-size: 1rem; }
+        .testimonial-card__author span { color: var(--text-sub); font-size: 0.85rem; }
+
+        /* =========================================
+           9. KONTAKT A MAPA
+           ========================================= */
+        .contact__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; background: var(--white); padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.02); }
+        .contact__info-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .contact__item { display: flex; align-items: flex-start; gap: 1rem; }
+        .contact__item-icon { width: 50px; height: 50px; background: var(--bg-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .contact__item-text h4 { font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.2rem; }
+        .contact__item-text p { color: var(--text-sub); font-size: 0.95rem; }
+        
+        .contact__map { height: 100%; min-height: 350px; border-radius: var(--radius-md); overflow: hidden; }
+        .contact__map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(20%); transition: filter 0.3s ease; }
+        .contact__map iframe:hover { filter: grayscale(0%); }
+
+        /* =========================================
+           10. CTA BANNER & FOOTER
+           ========================================= */
+        .cta-banner { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); padding: 5rem 2rem; border-radius: var(--radius-lg); text-align: center; color: var(--white); margin: 0 20px 4rem 20px; box-shadow: 0 20px 40px rgba(46, 196, 182, 0.3); }
+        .cta-banner h2 { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 1rem; }
+        .cta-banner p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 2rem; max-width: 600px; margin-inline: auto; }
+        .cta-banner .btn { background: var(--white); color: var(--primary); }
+        .cta-banner .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .footer { background-color: var(--text-main); color: var(--white); padding: 4rem 0 1.5rem 0; }
+        .footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer__logo { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 700; color: var(--white); display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+        .footer__logo i { color: var(--primary); }
+        .footer__desc { color: #A0AEC0; font-size: 0.95rem; margin-bottom: 1.5rem; max-width: 300px; }
+        .footer__title { font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .footer__links { display: flex; flex-direction: column; gap: 0.8rem; }
+        .footer__links a { color: #A0AEC0; font-size: 0.95rem; }
+        .footer__links a:hover { color: var(--primary); padding-left: 5px; }
+        .footer__social { display: flex; gap: 1rem; }
+        .footer__social a { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .footer__social a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer__bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #A0AEC0; font-size: 0.9rem; }
+
+        /* =========================================
+           11. RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 992px) {
+            .hero__container { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+            .hero__content p { margin-inline: auto; }
+            .hero__actions { justify-content: center; }
+            .hero__badge { left: 10px; bottom: 10px; padding: 15px; }
+            .dept-content { grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+            .dept-image { height: 250px; }
+            .contact__grid { grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+            .footer__grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .header__toggle { display: block; }
+            .nav { position: absolute; top: var(--header-height); left: 0; width: 100%; background: var(--white); padding: 2rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05); clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease; }
+            .nav.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .nav__list { flex-direction: column; gap: 1.5rem; text-align: center; }
+            .header .btn { display: none; }
+            
+            .booking-section { margin-top: -40px; }
+            .booking__card { padding: 2rem 1.5rem; }
+            .dept-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; flex-wrap: nowrap; }
+            .dept-tab { white-space: nowrap; }
+            
+            .footer__grid { grid-template-columns: 1fr; text-align: center; }
+            .footer__logo, .footer__desc { margin-inline: auto; }
+            .footer__social { justify-content: center; }
+            .cta-banner { margin: 0 10px 3rem 10px; padding: 3rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="container header__container">
+            <a href="#" class="header__logo">
+                <i class="fa-solid fa-notes-medical"></i> Mediqra
+            </a>
+            
+            <nav class="nav" id="nav">
+                <ul class="nav__list">
+                    <li><a href="#domov" class="nav__link">Domov</a></li>
+                    <li><a href="#oddelenia" class="nav__link">Oddelenia</a></li>
+                    <li><a href="#lekari" class="nav__link">Lekári</a></li>
+                    <li><a href="#o-nas" class="nav__link">O nás</a></li>
+                    <li><a href="#kontakt" class="nav__link">Kontakt</a></li>
+                </ul>
+            </nav>
+            
+            <a href="#rezervacia" class="btn btn--primary">Objednať sa</a>
+            
+            <button class="header__toggle" id="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero" id="domov">
+        <div class="container hero__container">
+            <div class="hero__content fade-in">
+                <h1>Vaše zdravie je naša <span>priorita</span></h1>
+                <p>Poskytujeme komplexnú a modernú lekársku starostlivosť pre vás a vašu rodinu s individuálnym prístupom a bez zbytočného čakania.</p>
+                <div class="hero__actions">
+                    <a href="#rezervacia" class="btn btn--primary">Objednať vyšetrenie</a>
+                    <a href="#oddelenia" class="btn btn--outline">Naše oddelenia</a>
+                </div>
+            </div>
+            
+            <div class="hero__image-wrapper fade-in">
+                <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1000&auto=format&fit=crop" alt="Tím lekárov v modernej klinike" class="hero__image">
+                <div class="hero__badge">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <div class="hero__badge-text">
+                        <h4>15+ Rokov</h4>
+                        <p>Skúseností v medicíne</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="booking-section" id="rezervacia">
+        <div class="container fade-in">
+            <div class="booking__card">
+                <form id="bookingForm" class="booking__form">
+                    
+                    <div class="booking__group">
+                        <label class="booking__label">Celé meno</label>
+                        <i class="fa-regular fa-user booking__icon"></i>
+                        <input type="text" class="booking__input" placeholder="Napr. Ján Novák" required>
+                    </div>
+
+                    <div class="booking__group">
+                        <label class="booking__label">Dátum narodenia</label>
+                        <i class="fa-solid fa-cake-candles booking__icon"></i>
+                        <input type="date" id="dobDate" class="booking__input" required>
+                    </div>
+                    
+                    <div class="booking__group">
+                        <label class="booking__label">E-mail</label>
+                        <i class="fa-regular fa-envelope booking__icon"></i>
+                        <input type="email" class="booking__input" placeholder="vas@email.sk" required>
+                    </div>
+                    
+                    <div class="booking__group">
+                        <label class="booking__label">Oddelenie</label>
+                        <i class="fa-solid fa-stethoscope booking__icon"></i>
+                        <select id="bookingSelect" class="booking__input" required>
+                            <option value="" disabled selected>Vyberte oddelenie...</option>
+                            <option value="vseobecna">Všeobecná medicína</option>
+                            <option value="kardiologia">Kardiológia</option>
+                            <option value="dermatologia">Dermatológia</option>
+                            <option value="laboratorium">Laboratórium</option>
+                        </select>
+                    </div>
+                    
+                    <div class="booking__group">
+                        <label class="booking__label">Preferovaný dátum vyšetrenia</label>
+                        <i class="fa-regular fa-calendar booking__icon"></i>
+                        <input type="date" id="prefDate" class="booking__input" required>
+                    </div>
+                    
+                    <div class="booking__group">
+                        <button type="submit" class="btn btn--accent booking__btn">Rezervovať termín</button>
+                    </div>
+                </form>
+
+                <div id="bookingSuccess" class="booking__success">
+                    <i class="fa-regular fa-circle-check"></i>
+                    <h3>Ďakujeme, žiadosť prijatá!</h3>
+                    <p style="color: var(--text-sub);">Váš termín sme zaevidovali. Čoskoro sa vám ozveme na zadaný e-mail pre potvrdenie.</p>
+                    <button class="btn btn--outline" id="resetBooking" style="margin-top: 1rem;">Nová rezervácia</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-light" id="oddelenia">
+        <div class="container">
+            <div class="section__header fade-in">
+                <h2 class="section__title">Naše odborné ambulancie</h2>
+                <p class="section__subtitle">Prehliadnite si naše špecializované oddelenia a zistite, s čím všetkým vám vieme v našej klinike pomôcť.</p>
+            </div>
+            
+            <div class="dept-tabs fade-in">
+                <button class="dept-tab active" data-tab="tab-vseobecna">Všeobecná medicína</button>
+                <button class="dept-tab" data-tab="tab-kardio">Kardiológia</button>
+                <button class="dept-tab" data-tab="tab-dermato">Dermatológia</button>
+                <button class="dept-tab" data-tab="tab-lab">Laboratórium</button>
+            </div>
+            
+            <div class="dept-content-wrap fade-in">
+                <div class="dept-content active" id="tab-vseobecna">
+                    <div class="dept-info">
+                        <h3>Všeobecná medicína</h3>
+                        <p>Základný kameň vášho zdravia. Naši všeobecní lekári sa starajú o komplexnú diagnostiku, liečbu bežných ochorení a pravidelnú prevenciu. Pristupujeme ku každému s ohľadom na jeho rodinnú anamnézu a životný štýl.</p>
+                        <ul class="dept-features">
+                            <li><i class="fa-solid fa-check"></i> Komplexné preventívne prehliadky</li>
+                            <li><i class="fa-solid fa-check"></i> EKG vyšetrenia priamo v ambulancii</li>
+                            <li><i class="fa-solid fa-check"></i> Očkovania a vystavovanie potvrdení</li>
+                            <li><i class="fa-solid fa-check"></i> Elektronický predpis liekov (eRecept)</li>
+                        </ul>
+                        <a href="#rezervacia" class="btn btn--primary" onclick="preselectService('vseobecna')">Objednať sa na vyšetrenie</a>
+                    </div>
+                    <div class="dept-image">
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800&auto=format&fit=crop" alt="Všeobecná medicína">
+                    </div>
+                </div>
+
+                <div class="dept-content" id="tab-kardio">
+                    <div class="dept-info">
+                        <h3>Kardiológia</h3>
+                        <p>Špecializujeme sa na diagnostiku a liečbu srdcovo-cievnych ochorení. Naša kardiologická ambulancia je vybavená najmodernejšou technikou na presné odhalenie aj tých najmenších abnormalít srdcového rytmu.</p>
+                        <ul class="dept-features">
+                            <li><i class="fa-solid fa-check"></i> Echokardiografia (USG srdca)</li>
+                            <li><i class="fa-solid fa-check"></i> 24-hodinové EKG a tlakový Holter</li>
+                            <li><i class="fa-solid fa-check"></i> Ergometria (záťažové testy)</li>
+                            <li><i class="fa-solid fa-check"></i> Liečba vysokého krvného tlaku a arytmií</li>
+                        </ul>
+                        <a href="#rezervacia" class="btn btn--primary" onclick="preselectService('kardiologia')">Objednať sa ku kardiológovi</a>
+                    </div>
+                    <div class="dept-image">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173ff9e5eb2?q=80&w=800&auto=format&fit=crop" alt="Kardiológia">
+                    </div>
+                </div>
+
+                <div class="dept-content" id="tab-dermato">
+                    <div class="dept-info">
+                        <h3>Dermatológia</h3>
+                        <p>Staráme sa o zdravie a krásu vašej pokožky. Od riešenia akútnych kožných problémov cez liečbu akné až po detailnú kontrolu znamienok pomocou digitálneho dermatoskopu.</p>
+                        <ul class="dept-features">
+                            <li><i class="fa-solid fa-check"></i> Preventívna kontrola znamienok (Dermatoskop)</li>
+                            <li><i class="fa-solid fa-check"></i> Komplexná liečba akné a ekzémov</li>
+                            <li><i class="fa-solid fa-check"></i> Odstraňovanie kožných výrastkov</li>
+                            <li><i class="fa-solid fa-check"></i> Estetická dermatológia</li>
+                        </ul>
+                        <a href="#rezervacia" class="btn btn--primary" onclick="preselectService('dermatologia')">Objednať sa na dermatológiu</a>
+                    </div>
+                    <div class="dept-image">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=800&auto=format&fit=crop" alt="Dermatológia">
+                    </div>
+                </div>
+
+                <div class="dept-content" id="tab-lab">
+                    <div class="dept-info">
+                        <h3>Laboratórne vyšetrenia</h3>
+                        <p>Rýchle a precízne analýzy. V našom certifikovanom laboratóriu vykonávame odbery krvi a iného biologického materiálu s garanciou rýchlych výsledkov zasielaných priamo do vašej aplikácie alebo e-mailu.</p>
+                        <ul class="dept-features">
+                            <li><i class="fa-solid fa-check"></i> Komplexné krvné obrazy a biochémia</li>
+                            <li><i class="fa-solid fa-check"></i> Alergologické a imunologické testy</li>
+                            <li><i class="fa-solid fa-check"></i> Odbery bez dlhého čakania</li>
+                            <li><i class="fa-solid fa-check"></i> Výsledky dostupné väčšinou do 24 hodín</li>
+                        </ul>
+                        <a href="#rezervacia" class="btn btn--primary" onclick="preselectService('laboratorium')">Objednať sa na odber</a>
+                    </div>
+                    <div class="dept-image">
+                        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=800&auto=format&fit=crop" alt="Laboratórium">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="lekari">
+        <div class="container">
+            <div class="section__header fade-in">
+                <h2 class="section__title">Spoznajte našich špecialistov</h2>
+                <p class="section__subtitle">Náš tím tvoria špičkoví lekári s dlhoročnou praxou, ktorí ku každému pacientovi pristupujú empaticky.</p>
+            </div>
+            
+            <div class="doctors__grid">
+                <div class="doctor-card fade-in">
+                    <div class="doctor-card__image">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=600&auto=format&fit=crop" alt="MUDr. Jana Nováková" loading="lazy">
+                    </div>
+                    <div class="doctor-card__info">
+                        <h3 class="doctor-card__name">MUDr. Jana Nováková</h3>
+                        <p class="doctor-card__spec">Kardiológ</p>
+                    </div>
+                </div>
+                <div class="doctor-card fade-in" style="transition-delay: 0.1s;">
+                    <div class="doctor-card__image">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=600&auto=format&fit=crop" alt="MUDr. Peter Kováč" loading="lazy">
+                    </div>
+                    <div class="doctor-card__info">
+                        <h3 class="doctor-card__name">MUDr. Peter Kováč</h3>
+                        <p class="doctor-card__spec">Všeobecný lekár</p>
+                    </div>
+                </div>
+                <div class="doctor-card fade-in" style="transition-delay: 0.2s;">
+                    <div class="doctor-card__image">
+                        <img src="https://images.unsplash.com/photo-1594824436998-ddedceb1d61b?q=80&w=600&auto=format&fit=crop" alt="MUDr. Lucia Biela" loading="lazy">
+                    </div>
+                    <div class="doctor-card__info">
+                        <h3 class="doctor-card__name">MUDr. Lucia Biela</h3>
+                        <p class="doctor-card__spec">Dermatológ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-light" id="o-nas">
+        <div class="container">
+            <div class="section__header fade-in">
+                <h2 class="section__title">Prečo si vybrať Mediqra?</h2>
+                <p class="section__subtitle">Prinášame nový štandard do slovenského zdravotníctva. Sústredíme sa na váš komfort a zdravie.</p>
+            </div>
+            
+            <div class="benefits__grid">
+                <div class="benefit-card fade-in">
+                    <div class="benefit-card__icon"><i class="fa-solid fa-laptop-medical"></i></div>
+                    <div class="benefit-card__content">
+                        <h4>Moderné vybavenie</h4>
+                        <p>Disponujeme najnovšími diagnostickými prístrojmi pre presné výsledky.</p>
+                    </div>
+                </div>
+                <div class="benefit-card fade-in" style="transition-delay: 0.1s;">
+                    <div class="benefit-card__icon"><i class="fa-solid fa-user-shield"></i></div>
+                    <div class="benefit-card__content">
+                        <h4>Skúsení lekári</h4>
+                        <p>Náš tím sa neustále vzdeláva, aby vám poskytol tú najlepšiu liečbu.</p>
+                    </div>
+                </div>
+                <div class="benefit-card fade-in" style="transition-delay: 0.2s;">
+                    <div class="benefit-card__icon"><i class="fa-regular fa-clock"></i></div>
+                    <div class="benefit-card__content">
+                        <h4>Rýchle termíny</h4>
+                        <p>Žiadne dlhé mesiace čakania. U nás dostanete termín v priebehu pár dní.</p>
+                    </div>
+                </div>
+                <div class="benefit-card fade-in" style="transition-delay: 0.3s;">
+                    <div class="benefit-card__icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <div class="benefit-card__content">
+                        <h4>Individuálny prístup</h4>
+                        <p>Na každého pacienta si vyhradíme dostatok času na vysvetlenie liečby.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section__header fade-in">
+                <h2 class="section__title">Čo o nás hovoria pacienti</h2>
+                <p class="section__subtitle">Najväčšou odmenou pre nás je zdravie a spokojnosť našich pacientov.</p>
+            </div>
+            
+            <div class="testimonials__grid">
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-card__stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-card__text">"Úžasný prístup celého personálu. Prostredie vôbec nepripomína nemocnicu, cítila som sa veľmi príjemne a lekár mi všetko ochotne vysvetlil."</p>
+                    <div class="testimonial-card__author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop" alt="Martina H." loading="lazy">
+                        <div>
+                            <h5>Martina H.</h5>
+                            <span>Pacientka (Kardiológia)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card fade-in" style="transition-delay: 0.1s;">
+                    <div class="testimonial-card__stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-card__text">"Konečne klinika, kde človek nečaká hodiny v čakárni. Objednanie cez web bolo super rýchle a vzali ma presne na čas. Odporúčam!"</p>
+                    <div class="testimonial-card__author">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Tomáš K." loading="lazy">
+                        <div>
+                            <h5>Tomáš K.</h5>
+                            <span>Pacient (Všeobecná ambulancia)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-light" id="kontakt">
+        <div class="container">
+            <div class="section__header fade-in">
+                <h2 class="section__title">Kde nás nájdete</h2>
+                <p class="section__subtitle">Sme tu pre vás v širšom centre mesta. Máme bezbariérový prístup a vlastné parkovisko.</p>
+            </div>
+            
+            <div class="contact__grid fade-in">
+                <div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem;">Kontaktujte nás</h3>
+                    <p style="color: var(--text-sub);">Máte otázky ohľadom vyšetrení alebo potrebujete pomôcť s rezerváciou? Neváhajte nám zavolať alebo napísať.</p>
+                    
+                    <div class="contact__info-list">
+                        <div class="contact__item">
+                            <div class="contact__item-icon"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="contact__item-text">
+                                <h4>Adresa kliniky</h4>
+                                <p>Zdravotnícka 15, 811 01 Bratislava</p>
+                            </div>
+                        </div>
+                        <div class="contact__item">
+                            <div class="contact__item-icon"><i class="fa-solid fa-phone"></i></div>
+                            <div class="contact__item-text">
+                                <h4>Telefón (Recepcia)</h4>
+                                <p>+421 900 123 456</p>
+                            </div>
+                        </div>
+                        <div class="contact__item">
+                            <div class="contact__item-icon"><i class="fa-solid fa-envelope"></i></div>
+                            <div class="contact__item-text">
+                                <h4>E-mail</h4>
+                                <p>info@mediqra.sk</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact__map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2662.062228805908!2d17.098485215886366!3d48.14713837922485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476c8942b036570d%3A0xc354b66df87b92bb!2sBratislava!5e0!3m2!1ssk!2ssk!4v1699900000000!5m2!1ssk!2ssk" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="cta-banner fade-in">
+                <h2>Objednajte sa ešte dnes</h2>
+                <p>Neodkladajte svoje zdravie na neskôr. Zarezervujte si termín rýchlo a jednoducho z pohodlia domova.</p>
+                <a href="#rezervacia" class="btn btn--primary" style="padding: 16px 40px; font-size: 1.1rem;">Rezervovať termín</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div>
+                    <a href="#" class="footer__logo"><i class="fa-solid fa-notes-medical"></i> Mediqra.</a>
+                    <p class="footer__desc">Moderná poliklinika poskytujúca komplexnú zdravotnú starostlivosť na európskej úrovni.</p>
+                    <div class="footer__social">
+                        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer__title">Naše oddelenia</h4>
+                    <div class="footer__links">
+                        <a href="#" onclick="switchTab('tab-vseobecna'); return false;">Všeobecná medicína</a>
+                        <a href="#" onclick="switchTab('tab-kardio'); return false;">Kardiológia</a>
+                        <a href="#" onclick="switchTab('tab-dermato'); return false;">Dermatológia</a>
+                        <a href="#" onclick="switchTab('tab-lab'); return false;">Laboratórium</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer__title">Užitočné odkazy</h4>
+                    <div class="footer__links">
+                        <a href="#lekari">Náš tím lekárov</a>
+                        <a href="#">Cenník výkonov</a>
+                        <a href="#">Časté otázky (FAQ)</a>
+                        <a href="#">Ochrana osobných údajov</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer__title">Otváracie hodiny</h4>
+                    <div class="footer__links" style="color: #A0AEC0; font-size: 0.95rem;">
+                        <p style="margin-bottom: 0.5rem;">Pondelok - Piatok:<br>07:00 - 18:00</p>
+                        <p>Víkendy a sviatky:<br>Zatvorené</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                © 2024 Mediqra Health Clinic. Všetky práva vyhradené. Dizajn pre vaše zdravie.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Sticky Header
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // 2. Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const nav = document.getElementById('nav');
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+        document.querySelectorAll('.nav__link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                menuToggle.querySelector('i').classList.add('fa-bars');
+                menuToggle.querySelector('i').classList.remove('fa-xmark');
+            });
+        });
+
+        // 3. ODDELENIA - TABS LOGIKA
+        const deptTabs = document.querySelectorAll('.dept-tab');
+        const deptContents = document.querySelectorAll('.dept-content');
+
+        deptTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                deptTabs.forEach(t => t.classList.remove('active'));
+                deptContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-tab');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        window.switchTab = function(tabId) {
+            document.getElementById('oddelenia').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                document.querySelector(`[data-tab="${tabId}"]`).click();
+            }, 500);
+        };
+
+        window.preselectService = function(serviceValue) {
+            const selectElement = document.getElementById('bookingSelect');
+            if(selectElement) selectElement.value = serviceValue;
+        };
+
+        // 4. Scroll Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // 5. Booking Form Logic & Date Constraints
+        const bookingForm = document.getElementById('bookingForm');
+        const bookingSuccess = document.getElementById('bookingSuccess');
+        const resetBtn = document.getElementById('resetBooking');
+        
+        // Obmedzenia pre dátumy
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Preferovaný dátum vyšetrenia nesmie byť v minulosti (dnes je minimum)
+        const prefDateInput = document.getElementById('prefDate');
+        if(prefDateInput) prefDateInput.setAttribute('min', today);
+        
+        // Dátum narodenia nesmie byť v budúcnosti (dnes je maximum)
+        const dobDateInput = document.getElementById('dobDate');
+        if(dobDateInput) dobDateInput.setAttribute('max', today);
+
+        // Simulácia odoslania formulára
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            bookingForm.style.display = 'none';
+            bookingSuccess.style.display = 'block';
+        });
+
+        resetBtn.addEventListener('click', () => {
+            bookingForm.reset();
+            bookingSuccess.style.display = 'none';
+            bookingForm.style.display = 'grid';
+        });
+    </script>
+</body>
+</html>
